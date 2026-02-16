@@ -84,3 +84,6 @@ python scripts/train_timeframe.py --all
 - Keep `.env`, logs, and local outputs untracked.
 - Re-run secret/path scans before any public push.
 - Use `docs/SECURITY_CHECKLIST.md` as the pre-push checklist.
+
+## Disclaimer
+This repository is a research/engineering project and not financial advice.
