@@ -9,7 +9,6 @@ Production-style research pipeline for BTC/USDT forecasting with Temporal Fusion
 ![Inference ensemble plot](assets/images/inference-ensemble-plot.png)
 
 ## Training and Evaluation Plots
-![Overall test predictions](assets/plots/test-predictions-overall.png)
 ![15min test predictions](assets/plots/test-predictions-15min.png)
 ![4hr test predictions](assets/plots/test-predictions-4hr.png)
 ![1day test predictions](assets/plots/test-predictions-1day.png)
