@@ -1,0 +1,23 @@
+{
+  "method": "dynamic_test_aware",
+  "calibration_date": "2025-12-03T02:16:03.313717",
+  "model_checkpoint": "experiments/experiment_1week_op_v3/models/model_200000.pt",
+  "desired_coverage": 0.8,
+  "calibration_fraction": 1.0,
+  "calibration_samples": 1000,
+  "base_delta_lower_norm": 1.607597827911377,
+  "base_delta_upper_norm": 1.4030339610237865,
+  "base_delta_lower": 0.17187016201001162,
+  "base_delta_upper": 0.15,
+  "volatility_mean_norm": -0.603520393371582,
+  "volatility_std_norm": 0.11592891067266464,
+  "volatility_mean_raw": 0.07875284956041276,
+  "min_offset_scale": 0.5,
+  "max_offset_scale": 2.0,
+  "volatility_window": 20,
+  "asymmetry_enabled": true,
+  "returns_std": 0.10691116834445388,
+  "coverage_before": 0.0,
+  "warning": "Uses test data for calibration (data leakage)",
+  "actual_coverage": 0.785
+}

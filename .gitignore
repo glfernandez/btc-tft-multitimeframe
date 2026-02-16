@@ -1,0 +1,34 @@
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+
+# Runtime / logs
+*.log
+*.tmp
+*.bak
+
+# Heavy local artifacts (keep out of public commits by default)
+data/*.csv
+data/*.parquet
+models/
+results/
+tests/output/
+
+# Experiment outputs
+experiments/**/models/
+experiments/**/results/
+experiments/**/*.log
+experiments/**/calibration_*_output.log
+experiments/**/evaluation_output.log
+
+# Generated images
+scripts/*.png
