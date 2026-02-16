@@ -6,8 +6,7 @@ Production-style research pipeline for BTC/USDT forecasting with Temporal Fusion
 - adapters for FutureView- and MPC-style downstream consumers
 
 ## Inference Preview
-![Inference preview 1](assets/images/inference-preview-1.jpeg)
-![Inference preview 2](assets/images/inference-preview-2.jpeg)
+![Inference ensemble plot](assets/images/inference-ensemble-plot.png)
 
 ## Portfolio Scope
 This public repository is intentionally lightweight and privacy-safe:
