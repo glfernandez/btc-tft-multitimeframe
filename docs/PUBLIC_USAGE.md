@@ -1,5 +1,7 @@
 # Public Usage Guide
 
+This repository is designed for public reproducibility with private data removed. If checkpoints are missing, train first.
+
 ## Inference Modes
 
 ### Individual timeframe
@@ -8,7 +10,8 @@ Use when you want one horizon only (`15min`, `4hr`, `1day`, `1week`):
 python scripts/infer_cli.py \
   --timestamp '2024-11-20 12:00:00' \
   --mode individual \
-  --timeframe 15min
+  --timeframe 15min \
+  --raw-data-path /absolute/path/to/btc_1min.csv
 ```
 
 ### Ensemble inference
@@ -16,7 +19,8 @@ Use when you want all horizons together:
 ```bash
 python scripts/infer_cli.py \
   --timestamp '2024-11-20 12:00:00' \
-  --mode ensemble
+  --mode ensemble \
+  --raw-data-path /absolute/path/to/btc_1min.csv
 ```
 
 ### Ensemble + adapters
@@ -27,6 +31,7 @@ python scripts/infer_cli.py \
   --mode ensemble \
   --include-futureview \
   --include-mpc \
+  --raw-data-path /absolute/path/to/btc_1min.csv \
   --output ensemble_output.json
 ```
 
@@ -38,6 +43,12 @@ python scripts/train_timeframe.py --timeframe 4hr
 ```
 
 ### All timeframes
+```bash
+python scripts/train_timeframe.py --all
+```
+
+## If Checkpoints Are Missing
+Run training first (per timeframe or all timeframes), then rerun inference:
 ```bash
 python scripts/train_timeframe.py --all
 ```

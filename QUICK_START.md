@@ -1,114 +1,53 @@
-# Quick Start Guide - Organized Workspace
+# Quick Start
 
-## 🎯 Current Structure
-
-```
-btc_tft/
-├── scripts/          # 13 Python scripts
-├── models/           # 1 checkpoint (model_200000.pt)
-├── results/          # 8 plots/results files
-├── docs/             # 16 documentation files
-├── experiments/      # Template for new experiments
-└── data/            # Data files
-```
-
-## 🚀 Common Tasks
-
-### Run Training
+## 1. Install
 ```bash
-python scripts/train.py
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
 ```
-- Automatically finds checkpoints in `models/`
-- Saves new checkpoints to `models/`
-- Uses data from `data/`
 
-### Evaluate Model
+## 2. Add Required Artifacts
+For each timeframe (`15min`, `4hr`, `1day`, `1week`), ensure:
+- `experiments/experiment_<tf>_op_v3/models/model_200000.pt`
+- `experiments/experiment_<tf>_op_v3/norm_stats.json`
+
+Provide a 1-minute BTC/USDT CSV and pass it via `--raw-data-path`.
+
+## 3. Run Inference
+Individual timeframe:
 ```bash
-python scripts/evaluate.py
+python scripts/infer_cli.py \
+  --timestamp "2024-11-20 12:00:00" \
+  --mode individual \
+  --timeframe 15min \
+  --raw-data-path /absolute/path/to/btc_1min.csv
 ```
-- Loads model from `models/model_200000.pt`
-- Saves plots to `results/`
 
-### Make Predictions
+Ensemble:
 ```bash
-python scripts/predict.py
+python scripts/infer_cli.py \
+  --timestamp "2024-11-20 12:00:00" \
+  --mode ensemble \
+  --include-futureview \
+  --include-mpc \
+  --raw-data-path /absolute/path/to/btc_1min.csv \
+  --output outputs/ensemble.json
 ```
-- Uses model from `models/`
-- Saves predictions to `results/`
 
-## 📦 Starting a New Experiment
-
-### Example: Train with 400/75 Sequence Lengths
-
-1. **Create experiment folder**:
-   ```bash
-   cp -r experiments/EXPERIMENT_TEMPLATE experiments/experiment_400_75
-   ```
-
-2. **Copy and modify training script**:
-   ```bash
-   cp scripts/train.py experiments/experiment_400_75/train_400_75.py
-   ```
-
-3. **Edit `train_400_75.py`**:
-   ```python
-   # Change sequence lengths
-   past_seq_len = 400  # Instead of 80
-   future_seq_len = 75  # Instead of 15
-   
-   # Update models directory
-   models_dir = workspace_root / "experiments" / "experiment_400_75" / "models"
-   models_dir.mkdir(parents=True, exist_ok=True)
-   ```
-
-4. **Run**:
-   ```bash
-   cd experiments/experiment_400_75
-   python train_400_75.py
-   ```
-
-5. **Results saved** in `experiments/experiment_400_75/`
-
-## 📁 Directory Purposes
-
-| Directory | Purpose | Contents |
-|-----------|---------|----------|
-| `scripts/` | All Python scripts | train.py, evaluate.py, predict.py, etc. |
-| `models/` | Model checkpoints | model_*.pt files |
-| `results/` | Evaluation results | Plots (*.png), predictions (*.csv) |
-| `docs/` | Documentation | README, guides, analysis docs |
-| `experiments/` | Training variations | Individual experiment folders |
-| `data/` | Data files | CSV files, datasets |
-
-## ✅ Benefits
-
-- ✅ **Clean workspace** - No clutter in root directory
-- ✅ **Easy experiments** - Each variation is self-contained
-- ✅ **Organized results** - All outputs in dedicated folders
-- ✅ **Reusable scripts** - Scripts work from any location
-- ✅ **Scalable** - Easy to add new experiments
-
-## 🔧 Script Paths
-
-All scripts automatically:
-- Add workspace root to Python path
-- Find data in `data/` directory
-- Save checkpoints to `models/` directory
-- Save results to `results/` directory
-
-You can run scripts from anywhere:
+## 4. Train Models
+One timeframe:
 ```bash
-# From workspace root
-python scripts/train.py
-
-# From scripts directory
-cd scripts
-python train.py
-
-# From experiment folder
-cd experiments/experiment_400_75
-python train_400_75.py
+python scripts/train_timeframe.py --timeframe 4hr
 ```
 
-All paths are handled automatically!
+All timeframes:
+```bash
+python scripts/train_timeframe.py --all
+```
 
+## 5. Public Publishing Rule
+Before pushing public updates:
+- do not commit raw datasets
+- do not commit API keys/tokens
+- do not commit local absolute paths in logs or metadata

@@ -1,75 +1,75 @@
 # BTC/USDT Multi-Timeframe TFT
 
-Temporal Fusion Transformer (TFT) forecasting pipeline for BTC/USDT with:
+Production-style research pipeline for BTC/USDT forecasting with Temporal Fusion Transformer (TFT), supporting:
 - individual timeframe inference (`15min`, `4hr`, `1day`, `1week`)
-- ensemble inference across all timeframes
-- adapters for MPC/FutureView integration
+- ensemble inference across all configured timeframes
+- adapters for FutureView- and MPC-style downstream consumers
 
-## Project Layout
+## Portfolio Scope
+This public repository is intentionally lightweight and privacy-safe:
+- includes source code, experiment configuration, and inference/training wrappers
+- excludes private datasets, heavy logs, and model checkpoints by default
+- can be used by the public to train and run inference after adding data/checkpoints
+
+## Repository Layout
 - `scripts/inference_pipeline.py`: core multi-timeframe predictor
-- `scripts/futureview_adapter.py`: converts ensemble output to FutureView-style fields
-- `scripts/mpc_adapter.py`: converts ensemble output to MPC-ready vectors/paths
 - `scripts/infer_cli.py`: public CLI for individual or ensemble inference
-- `scripts/train_timeframe.py`: public CLI wrapper for further training
-- `experiments/experiment_*_op_v3/`: timeframe-specific configs, features, and model artifacts
+- `scripts/train_timeframe.py`: wrapper for timeframe-specific training scripts
+- `scripts/futureview_adapter.py`: maps ensemble output to FutureView-style schema
+- `scripts/mpc_adapter.py`: maps ensemble output to MPC vectors
+- `experiments/experiment_*_op_v3/`: timeframe-specific feature engineering and training entrypoints
+- `docs/PUBLIC_USAGE.md`: operational usage and troubleshooting
 
-## Quickstart
-
-### 1. Install dependencies
+## Setup
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 2. Verify required artifacts exist
-You need these per timeframe:
-- `experiments/experiment_<tf>_op_v3/feature_engineering.py`
-- `experiments/experiment_<tf>_op_v3/norm_stats.json`
-- `experiments/experiment_<tf>_op_v3/models/model_200000.pt`
+## Required Inputs Before Inference
+1. Per timeframe, checkpoint + stats must exist:
+   - `experiments/experiment_<tf>_op_v3/models/model_200000.pt`
+   - `experiments/experiment_<tf>_op_v3/norm_stats.json`
+   - `experiments/experiment_<tf>_op_v3/feature_engineering.py`
+2. A 1-minute BTC/USDT CSV must be provided via:
+   - default path expected by `inference_pipeline.py`, or
+   - `--raw-data-path` in CLI commands
 
-And a raw 1-minute BTC/USDT CSV at:
-- `data/btcusd_2012-01-01_to_2024-11-23_1min_updated_20250528.csv`
-
-### 3. Inference (individual timeframe)
+## Inference
+Individual timeframe:
 ```bash
 python scripts/infer_cli.py \
-  --timestamp '2024-11-20 12:00:00' \
+  --timestamp "2024-11-20 12:00:00" \
   --mode individual \
-  --timeframe 4hr
+  --timeframe 4hr \
+  --raw-data-path /absolute/path/to/btc_1min.csv
 ```
 
-### 4. Inference (ensemble)
+Ensemble + adapters:
 ```bash
 python scripts/infer_cli.py \
-  --timestamp '2024-11-20 12:00:00' \
+  --timestamp "2024-11-20 12:00:00" \
   --mode ensemble \
   --include-futureview \
-  --include-mpc
-```
-
-### 5. Save inference JSON
-```bash
-python scripts/infer_cli.py \
-  --timestamp '2024-11-20 12:00:00' \
-  --mode ensemble \
+  --include-mpc \
+  --raw-data-path /absolute/path/to/btc_1min.csv \
   --output inference_output.json
 ```
 
 ## Train Further
-Use timeframe wrapper:
+Run one timeframe:
 ```bash
 python scripts/train_timeframe.py --timeframe 15min
-python scripts/train_timeframe.py --timeframe 4hr
-python scripts/train_timeframe.py --timeframe 1day
-python scripts/train_timeframe.py --timeframe 1week
 ```
 
-Or run all sequentially:
+Run all timeframes:
 ```bash
 python scripts/train_timeframe.py --all
 ```
 
-## Notes
-- This repository intentionally separates reusable source from heavy local outputs.
-- For public publishing, avoid committing raw data, logs, and checkpoints unless intentionally sharing them.
+## Security and Publishing Notes
+- Keep raw data and checkpoints out of git unless intentionally publishing reproducibility artifacts.
+- Keep `.env`, logs, and local outputs untracked.
+- Re-run secret/path scans before any public push.
+- Use `docs/SECURITY_CHECKLIST.md` as the pre-push checklist.
